@@ -4,4 +4,4 @@ MINIMA is a reusable least-privilege primitive for data-aware agents and contrac
 
 The contract is finalized on Studionet at `0x180bC04e85Eb45Fab80354badC12a73ec7a76B66`. In the canonical live run, consensus selected only `recipient_name` and `delivery_address` (mask `3`), excluded phone, date of birth and passport fields (mask `28`), found no ambiguity, and issued permit 1. Exact binding checks passed; revoking the purpose then made the same permit invalid. The deployed source is byte-identical to deployment commit `47203f155a46558eeaca0afca9951fa2778e755b`. Full finalized transaction evidence is in `DEPLOYMENT.md`.
 
-The local package passes 39 adversarial Direct Mode tests, GenVM lint/SDK validation, the Studionet chain guard, and strict preflight. GitHub publication and CI are not claimed because the separately-created `lolaaa00/minima` remote has not yet been connected.
+The local package passes 39 adversarial Direct Mode tests, GenVM lint/SDK validation, the Studionet chain guard, and strict preflight. Source and evidence are published at `https://github.com/lolaaa00/MINIMA`.

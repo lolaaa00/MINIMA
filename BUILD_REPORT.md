@@ -31,9 +31,9 @@ Prepared as a standalone GenLayer Intelligent Contract package for `lolaaa00/min
 
 ## Open release gates
 
-This folder began without Git metadata. A local repository was initialized, but the owner has not yet supplied the separately-created `lolaaa00/minima` remote. No push or GitHub Actions run is claimed.
+This folder began without Git metadata. A local repository was initialized and published to `https://github.com/lolaaa00/MINIMA` on branch `main`.
 
-Deployment and the full schema → purpose → request → permit → revocation lifecycle finalized on Studionet. Deployed-source parity is byte-exact, and `DEPLOYMENT.md` contains canonical explorer evidence. The remaining release gate is creation/connection of the GitHub remote followed by push and CI.
+Deployment and the full schema → purpose → request → permit → revocation lifecycle finalized on Studionet. Deployed-source parity is byte-exact, and `DEPLOYMENT.md` contains canonical explorer evidence. No GitHub Actions workflow is included; the recorded local checks are the verification evidence.
 
 `npm audit` reports six vulnerabilities in transitive dependencies of the exact required `genlayer@0.39.1` CLI (four moderate, two critical). The suggested automated fix replaces the required CLI with an incompatible version, so it was not applied. The CLI remains development-only and exactly pinned as required.
 

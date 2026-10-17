@@ -9,7 +9,7 @@ RPC: https://studio.genlayer.com/api
 Explorer: https://explorer-studio.genlayer.com
 CLI: genlayer 0.39.1 (repository-local)
 
-Intended repository: https://github.com/lolaaa00/minima
+Repository: https://github.com/lolaaa00/MINIMA
 Deployment commit: 47203f155a46558eeaca0afca9951fa2778e755b
 Contract source SHA-256: 2209e8b245326a416e8818a740e405a6ec8a3bc5b8d360373976b2f6f5009b73
 Contract address: 0x180bC04e85Eb45Fab80354badC12a73ec7a76B66
@@ -73,4 +73,4 @@ The correct schema hash, purpose hash, action hash, and consumer returned `true`
 
 - Expiry was not awaited live for 24 hours. Deterministic expiry is covered in Direct Mode tests; no live-expiry claim is made.
 - Unauthorized-requester rejection is covered in Direct Mode tests; no deliberately reverted live transaction was submitted.
-- The intended GitHub repository has not been created or connected in this folder, so no GitHub URL availability, push, or CI run is claimed.
+- The source and evidence commits are published at `https://github.com/lolaaa00/MINIMA`. No GitHub Actions workflow is included, so no CI run is claimed; the recorded local verification commands are the release evidence.

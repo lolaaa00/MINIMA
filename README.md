@@ -218,7 +218,7 @@ MINIMA is finalized on Studionet at [`0x180bC04e85Eb45Fab80354badC12a73ec7a76B66
 - Live consensus result: necessary mask `3`, excluded mask `28`, ambiguity mask `0`
 - Live revocation result: the previously valid permit became invalid
 
-See `DEPLOYMENT.md` for the complete schema, purpose, request, permit, binding, source-parity, transaction, and revocation evidence. GitHub publication and CI remain unclaimed until the separately-created `lolaaa00/minima` remote is connected.
+See `DEPLOYMENT.md` for the complete schema, purpose, request, permit, binding, source-parity, transaction, and revocation evidence. The source is published at [github.com/lolaaa00/MINIMA](https://github.com/lolaaa00/MINIMA).
 
 ## Repository layout
 
