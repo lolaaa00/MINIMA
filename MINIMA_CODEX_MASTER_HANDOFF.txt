@@ -1,0 +1,237 @@
+MINIMA — CODEX MASTER HANDOFF
+Target repository: lolaaa00/minima
+Target network: GenLayer Studionet ONLY, chain ID 61999
+Canonical RPC: https://studio.genlayer.com/api
+Explorer: https://explorer-studio.genlayer.com
+Required repository-local GenLayer CLI: 0.39.1
+No frontend.
+
+CONTEXT
+The ZIP was prepared before the GitHub repository existed. The owner will manually unzip this folder on her machine, open the extracted `minima` folder in Codex, create `lolaaa00/minima` herself, and let you finish the repository locally before she pushes it.
+
+Do not assume you are connected to lolaaa00. Do not push anywhere until the local git remote is explicitly checked and the user has created/connected the correct repository.
+
+PRODUCT / PRIMITIVE GOAL
+MINIMA is a standalone reusable Intelligent Contract primitive for field-level data minimisation. It must never store private customer data. A data controller publishes only a schema catalogue (field names/descriptions/sensitivity labels), freezes a purpose, authorised requester, consumer and TTL, and then an authorised requester commits an action hash. GenLayer validators independently classify every declared field as NECESSARY, NOT_NECESSARY or AMBIGUOUS for that exact frozen purpose. Deterministic contract logic rejects malformed/incomplete/duplicate field classifications, fails closed if any field is ambiguous, and otherwise issues a permit containing exactly the NECESSARY field mask.
+
+THE CENTRAL SECURITY INVARIANT
+`permit.field_mask` must be derived solely from the consensus-backed necessary mask. There must be no caller argument, owner override, admin method, post-resolution edit, consumer preference or UI setting that can expand it.
+
+NON-NEGOTIABLE NETWORK RULE
+Use stable Studionet only. Chain ID 61999. Do not migrate this repository to a preview chain, do not install release-candidate tooling, do not change the `studionet` alias to another RPC, and do not copy fee-preview deployment code into this repository. Run `python scripts/preflight.py` before every live deployment. It intentionally fails if preview-network contamination appears.
+
+NON-NEGOTIABLE CATEGORY RULE
+This is for the standalone Intelligent Contracts contribution category. There must be NO frontend directory and no product UI. Do not turn MINIMA into a Project. A tiny contract consumer is permissible only if it materially proves the primitive and stays subordinate to MINIMA; do not add one merely for cosmetics.
+
+CURRENT STARTING POINT
+The ZIP already contains:
+- `contracts/minima.py`
+- an adversarial Direct Mode test suite
+- immutable schema/purpose hashing
+- custom validator re-execution using `run_nondet_unsafe`
+- strict complete-field parsing
+- ambiguity fail-closed logic
+- permit binding to schema hash, purpose hash, requester, consumer, action hash and TTL
+- purpose/permit revocation
+- threat model
+- architecture notes
+- reviewer demo plan
+- 61999 network guard
+- preflight guard
+- draft submission notes
+- deployment evidence template with intentionally PENDING fields
+
+YOUR JOB
+Treat the existing code as a serious first implementation, not as gospel. Audit it line by line against the exact GenLayer stable runtime and current pinned tooling available locally. Fix everything necessary to make it genuinely deployable and reviewer-proof.
+
+WORK IN CHECKPOINTS. AFTER EVERY CHECKPOINT:
+1. run all relevant tests/lint/preflight;
+2. inspect `git diff` yourself;
+3. commit only coherent changes;
+4. once the correct `lolaaa00/minima` remote exists, push the checkpoint;
+5. never claim a check passed unless you actually ran it.
+
+CHECKPOINT 0 — ENVIRONMENT AND REPOSITORY SAFETY
+- Confirm the extracted working directory is the intended MINIMA folder.
+- Inspect `git remote -v`. If there is no remote yet, continue locally. If a remote exists and is not `lolaaa00/minima`, STOP before any push and fix it only with the user's approval.
+- Confirm Node, npm, Python and git.
+- Run `npm install` and verify the repository-local GenLayer CLI resolves to exactly 0.39.1 through `npm run genlayer -- --version` (or the exact supported version command).
+- Run `npm run genlayer -- network set studionet` and inspect network info.
+- Run `python scripts/check_studionet.py`; it must report chain ID 61999.
+- Run `python scripts/preflight.py`.
+- Do not use Docker unless absolutely required by a test the user explicitly asks for; Direct Mode and hosted Studionet are sufficient for this task.
+
+CHECKPOINT 1 — CONTRACT RUNTIME AUDIT
+Audit `contracts/minima.py` against the actual stable GenLayer runtime used by Studionet 61999.
+Verify/fix:
+- stable `py-genlayer` dependency header;
+- storage dataclasses and TreeMap/DynArray compatibility;
+- Address comparisons and zero-address handling;
+- transaction datetime access in writes AND views;
+- integer/bitmask types and max 24 field invariant;
+- event definitions/emission syntax;
+- Keccak hashing;
+- `gl.nondet.exec_prompt` response handling;
+- `gl.vm.run_nondet_unsafe` leader/validator return shape;
+- custom validator independent re-execution;
+- no unsupported Python/runtime features;
+- no hidden reliance on a different consensus/runtime family.
+
+If the current stable API requires different syntax, adapt it while preserving semantics. Do NOT port the project to any preview environment.
+
+CHECKPOINT 2 — ADVERSARIAL CONSENSUS HARDENING
+Attack the equivalence principle, not just happy-path output parsing.
+At minimum prove/fix:
+- leader omits a field;
+- leader duplicates a field;
+- leader invents a field ID;
+- leader changes a NECESSARY field to NOT_NECESSARY;
+- leader suppresses an AMBIGUOUS field;
+- validator and leader disagree on the necessary mask;
+- validator and leader disagree on ambiguity;
+- malformed JSON;
+- wrong field_id type / boolean-as-int tricks;
+- unsupported verdict;
+- empty/duplicate reason codes must never influence permission;
+- prompt-injection-like strings in field definitions and purpose text are rejected or inert;
+- the model cannot return a permit mask directly;
+- every field in the sealed schema is always evaluated;
+- ambiguity can NEVER mint a permit.
+
+Prefer consensus comparison over economically meaningful state: necessary mask and ambiguity mask. Do not make prose reasons consensus-critical unless absolutely necessary.
+
+CHECKPOINT 3 — STATE / AUTHORIZATION HARDENING
+Attack all deterministic transitions:
+- only schema owner can modify draft schema;
+- sealed schema immutable;
+- purpose can only reference sealed schema hash;
+- purpose immutability after seal;
+- purpose revocation invalidates old permits through `is_permit_valid`;
+- optional wildcard requester, if retained, cannot become an authorization bypass;
+- consumer cannot be zero address;
+- action hash canonicalisation cannot be bypassed;
+- request cannot be resolved twice;
+- request cannot be cancelled after resolution;
+- permit cannot be enlarged after mint;
+- permit revocation authorization is correct;
+- TTL cannot overflow or exceed the frozen cap;
+- expired permits fail validation;
+- wrong schema hash, purpose hash, action hash or consumer fail validation;
+- no stale definition substitution.
+
+Consider whether a purpose should be immutable forever once sealed (preferred) and new semantics should always require a new purpose ID/hash.
+
+CHECKPOINT 4 — DIRECT MODE TEST DEPTH
+Run and expand `tests/direct/test_minima.py` until it is adversarial, not decorative.
+Target at least 30 meaningful Direct Mode tests if the runtime supports them cleanly. Test invariants, malformed model outputs, authorization, hash binding, expiry, revocation and validator disagreement.
+
+Do not chase a test-count number by splitting assertions. Every test must defend a distinct failure mode.
+
+Required commands (adapt only to the actually installed stable toolchain):
+- `genvm-lint check contracts/minima.py`
+- `pytest tests/direct -v`
+- `python scripts/preflight.py`
+
+All must be green before live deployment.
+
+CHECKPOINT 5 — OPTIONAL CONSUMER PROOF
+Decide critically whether a minimal consumer IC materially improves the submission. If yes, implement a tiny consumer that:
+- is bound to MINIMA's deployed address;
+- pins expected schema and purpose hashes;
+- requires the exact action hash;
+- proves the permit is for itself as consumer;
+- prevents replay itself;
+- stores/releases only NON-SENSITIVE FIXTURE DATA for the demonstration.
+
+Never put real or realistic private user records on-chain.
+
+If stable synchronous IC-to-IC view semantics make this consumer brittle on 61999, do not force it. The primitive is valid without a frontend or fake consumer proof.
+
+CHECKPOINT 6 — LIVE STUDIONET 61999 DEPLOYMENT
+Only after all local checks pass:
+- re-run the chain guard immediately before signing;
+- deploy `contracts/minima.py` to Studionet 61999 using repository-local CLI 0.39.1;
+- wait for acceptance and finality as supported by the stable chain;
+- record the exact deployment transaction, address, explorer URL, deployed source hash and git commit SHA.
+
+Never invent an address or transaction.
+
+CHECKPOINT 7 — LIVE CANONICAL LIFECYCLE
+Run the reviewer lifecycle in `docs/REVIEWER_DEMO.md` on 61999 using real finalized transactions:
+1. create four-field shipping schema;
+2. seal schema;
+3. create exact shipping purpose;
+4. seal purpose;
+5. open request from the authorised requester with an exact action hash;
+6. resolve through real GenLayer consensus;
+7. record actual masks and permit ID;
+8. prove correct validation returns true;
+9. prove wrong action hash returns false;
+10. prove wrong consumer returns false;
+11. revoke purpose or permit;
+12. prove the historical permit is now invalid.
+
+If live validators return ambiguity, do not doctor the record. Diagnose why, improve definitions on a FRESH purpose/schema version if needed, re-test, and preserve the honest history.
+
+CHECKPOINT 8 — INTEGRATION TEST / EVIDENCE
+Turn the successful live lifecycle into a repeatable integration test where practical. Keep it pinned to Studionet 61999.
+Populate `DEPLOYMENT.md` with REAL evidence only.
+Ensure every explorer link resolves and every claimed transaction belongs to the final canonical deployment.
+
+CHECKPOINT 9 — REVIEWER DOCUMENTATION
+Rewrite documentation to match final code exactly.
+README must lead with the primitive/invariant, not marketing language.
+Clearly explain:
+- why an ordinary deterministic smart contract cannot solve field necessity;
+- what GenLayer consensus decides;
+- what deterministic code decides;
+- why ambiguity fails closed;
+- why private field values never belong on-chain;
+- how hashes prevent purpose/schema/action substitution;
+- limitations and non-claims;
+- exact 61999 evidence.
+
+Update `docs/SUBMISSION_NOTES_DRAFT.md` into a concise final submission note only after live evidence exists.
+
+CHECKPOINT 10 — FINAL RED-TEAM REVIEW
+Before declaring done, review MINIMA as a hostile GenLayer contribution reviewer.
+Try to reject it for:
+- thin LLM wrapper;
+- generic `AI decides access` framing;
+- owner-controlled permit inflation;
+- incomplete equivalence principle;
+- schema/purpose substitution;
+- unsafe private-data handling;
+- weak state design;
+- fake composability;
+- missing live proof;
+- wrong network;
+- stale docs;
+- copied boilerplate without a real primitive.
+
+Fix every defensible criticism.
+
+FINAL ACCEPTANCE GATES
+Do not tell the user MINIMA is finished until all applicable gates are true:
+- no frontend;
+- only Studionet 61999 configuration/evidence;
+- repository-local CLI exactly 0.39.1;
+- GenVM lint green;
+- full Direct Mode suite green;
+- preflight green;
+- exact schema/purpose/action/consumer binding proven;
+- ambiguity fail-closed proven;
+- no method can widen the consensus-derived field mask;
+- real deployed address and finalized transaction evidence recorded;
+- real canonical lifecycle recorded;
+- docs match HEAD;
+- git status clean;
+- correct remote is `lolaaa00/minima` before push.
+
+IMPORTANT
+Do not add a frontend.
+Do not deploy to or mention a preview chain in final evidence.
+Do not fabricate explorer proof.
+Do not silently weaken MINIMA to make tests pass.
+Do not turn `NECESSARY` into a legal-compliance claim.
+Do not store private data on-chain.

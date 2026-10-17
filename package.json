@@ -1,0 +1,14 @@
+{
+  "name": "minima-genlayer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MINIMA: consensus-backed field minimisation and least-privilege data permits",
+  "scripts": {
+    "genlayer": "genlayer",
+    "network:studionet": "genlayer network set studionet && genlayer network info",
+    "preflight": "python scripts/preflight.py"
+  },
+  "devDependencies": {
+    "genlayer": "0.39.1"
+  }
+}

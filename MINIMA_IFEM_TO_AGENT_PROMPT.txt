@@ -1,0 +1,20 @@
+You are finishing MINIMA for `lolaaa00/minima`.
+
+The owner has already manually unzipped the supplied package and opened the extracted `minima` folder in Codex. The GitHub account connected elsewhere may be different; do not assume repository ownership or push anywhere until `git remote -v` is explicitly checked. The intended GitHub repository is `lolaaa00/minima`, which she will create herself.
+
+Read `MINIMA_CODEX_MASTER_HANDOFF.txt` first and execute it checkpoint by checkpoint without skipping anything.
+
+Critical rules:
+- standalone Intelligent Contract only, NO frontend;
+- stable GenLayer Studionet only, chain ID 61999;
+- RPC `https://studio.genlayer.com/api`;
+- explorer `https://explorer-studio.genlayer.com`;
+- repository-local GenLayer CLI exactly `0.39.1`;
+- do not migrate to any preview/release-candidate network or tooling;
+- preserve the core invariant that a permit can contain only the consensus-derived NECESSARY field mask;
+- any AMBIGUOUS field must fail closed and mint no permit;
+- never store private user data on-chain;
+- do not fabricate deployment addresses, transaction hashes, test results or explorer evidence;
+- only claim completion after GenVM lint, Direct Mode, preflight and a real finalized 61999 lifecycle are green and documented.
+
+Start by auditing the extracted code against the actual stable runtime, then harden, test, deploy, record proof, red-team the final repository and push only to the correct `lolaaa00/minima` remote once it exists.
