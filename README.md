@@ -210,16 +210,15 @@ The CLI version must be `0.39.1` and the chain guard must report `61999` before 
 
 ## Deployment
 
-Do not paste an address into this repository until a real deployment has finalized.
+MINIMA is finalized on Studionet at [`0x180bC04e85Eb45Fab80354badC12a73ec7a76B66`](https://explorer-studio.genlayer.com/tx/0xce7df652b2c0a063bb74204efb85c6bed960b7ac9e6bb76e3f1fb563c257b29e).
 
-```bash
-npm run genlayer -- network set studionet
-npm run genlayer -- deploy --contract contracts/minima.py
-```
+- Deployment commit: `47203f155a46558eeaca0afca9951fa2778e755b`
+- Contract source SHA-256: `2209e8b245326a416e8818a740e405a6ec8a3bc5b8d360373976b2f6f5009b73`
+- Deployment status: `FINALIZED`
+- Live consensus result: necessary mask `3`, excluded mask `28`, ambiguity mask `0`
+- Live revocation result: the previously valid permit became invalid
 
-Then complete the lifecycle in `docs/REVIEWER_DEMO.md` and replace the explicit `PENDING` fields in `DEPLOYMENT.md` with real explorer evidence.
-
-No deployment is claimed in the repository until those fields contain independently verifiable, finalized Studionet evidence.
+See `DEPLOYMENT.md` for the complete schema, purpose, request, permit, binding, source-parity, transaction, and revocation evidence. GitHub publication and CI remain unclaimed until the separately-created `lolaaa00/minima` remote is connected.
 
 ## Repository layout
 

@@ -17,7 +17,7 @@ Prepared as a standalone GenLayer Intelligent Contract package for `lolaaa00/min
 - stable Studionet network manifest;
 - repository-local GenLayer CLI pin at `0.39.1`;
 - strict preflight that rejects preview-network contamination;
-- deployment evidence template with no fabricated address or transaction;
+- finalized Studionet deployment and canonical lifecycle evidence;
 - detailed Codex handoff.
 
 ## Checks actually run on 2026-10-17
@@ -33,8 +33,8 @@ Prepared as a standalone GenLayer Intelligent Contract package for `lolaaa00/min
 
 This folder began without Git metadata. A local repository was initialized, but the owner has not yet supplied the separately-created `lolaaa00/minima` remote. No push or GitHub Actions run is claimed.
 
-Live deployment, finalized lifecycle transactions, source parity against deployed code, and explorer evidence remain pending until a funded Studionet signer is available. `DEPLOYMENT.md` intentionally retains explicit `PENDING` fields.
+Deployment and the full schema → purpose → request → permit → revocation lifecycle finalized on Studionet. Deployed-source parity is byte-exact, and `DEPLOYMENT.md` contains canonical explorer evidence. The remaining release gate is creation/connection of the GitHub remote followed by push and CI.
 
 `npm audit` reports six vulnerabilities in transitive dependencies of the exact required `genlayer@0.39.1` CLI (four moderate, two critical). The suggested automated fix replaces the required CLI with an incompatible version, so it was not applied. The CLI remains development-only and exactly pinned as required.
 
-The finishing agent must run those checks locally and fix any runtime/tooling incompatibility before submission.
+Live expiry was not awaited for 24 hours; deterministic expiry is proven by Direct Mode tests and is not misrepresented as a live observation.

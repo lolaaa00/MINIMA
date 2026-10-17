@@ -1,6 +1,6 @@
 # Reviewer demo
 
-The final submission should show both adversarial Direct Mode behaviour and one finalized Studionet lifecycle.
+The package includes both adversarial Direct Mode behaviour and one finalized Studionet lifecycle. Exact live values and explorer links are in `DEPLOYMENT.md`.
 
 ## Part A — Direct Mode
 
@@ -31,32 +31,31 @@ The current suite contains 39 meaningful tests. It additionally exercises invent
 
 Do not use a preview network.
 
-### 1. Deploy
+### 1. Deployment result
 
-Deploy `contracts/minima.py` with the repository-local CLI and record the finalized deployment transaction and address in `DEPLOYMENT.md`.
+The source was deployed from commit `47203f155a46558eeaca0afca9951fa2778e755b`, finalized at `0x180bC04e85Eb45Fab80354badC12a73ec7a76B66`, then read back and verified byte-identical.
 
 ### 2. Create schema
 
-Create a `Shipping profile` schema and add four fields in this exact order:
+The live `Shipping profile v1` schema contains these fields in this exact order:
 
 ```text
-0 street_address  PERSONAL
-1 email           PERSONAL
-2 date_of_birth   SENSITIVE
-3 passport_number RESTRICTED
+0 recipient_name   PERSONAL
+1 delivery_address PERSONAL
+2 phone_number     PERSONAL
+3 date_of_birth    SENSITIVE
+4 passport_number  RESTRICTED
 ```
 
-Seal the schema and record the resulting definition hash.
+It was sealed with hash `4a0c898db0dfa9cb746e66cc72e584accc0c9dbf9dc10ccce293fc3ee4631a4c`.
 
 ### 3. Create sealed purpose
 
-Purpose:
+Live purpose:
 
-> Determine the destination needed to route one physical parcel to the customer's declared delivery address. No notifications, identity verification, age checks, analytics, marketing, or secondary use are part of this purpose.
+> Print the intended recipient name and route one ordinary physical parcel to the declared postal delivery address. The carrier does not send notifications and performs no identity, age, passport, analytics, marketing, or secondary processing.
 
-Bind a real test requester address and a dedicated test consumer address. Use a short but safe TTL for the demonstration.
-
-Seal it and record the purpose hash.
+It binds the recorded requester, a dedicated consumer, and a one-day TTL. It was sealed with hash `cc164c3758360a5ba055d8eb2d8a208e464a0dcb95de1260ca58c8b8aae97d08`.
 
 ### 4. Resolve a request
 
@@ -67,15 +66,16 @@ From the authorised requester:
 - wait for ACCEPTED and then FINALIZED;
 - record the request transaction, result and permit ID.
 
-Expected conceptual result:
+Finalized result:
 
 ```text
-street_address  NECESSARY
-others          NOT_NECESSARY
-field_mask      1
+recipient_name   NECESSARY
+delivery_address NECESSARY
+others           NOT_NECESSARY
+field_mask       3
 ```
 
-Do not falsify the proof if live validators classify differently. If the result is ambiguous, sharpen the purpose/field definitions on a fresh purpose version and repeat. Never edit evidence to match a desired verdict.
+The ambiguity mask was zero. The exact on-chain result—not an expected result—is recorded in `DEPLOYMENT.md`.
 
 ### 5. Prove binding
 
